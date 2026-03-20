@@ -4,6 +4,9 @@ import random
 S = requests.Session()
 
 URL = "https://fr.wikipedia.org/w/api.php"
+HEADERS = {
+    'User-Agent': 'wikiGuess/v1 (https://bourreau.dev:8002; https://github.com/TTalex/wikiGuess)'
+}
 
 def getRandomPages():
     PARAMS = {
@@ -16,7 +19,7 @@ def getRandomPages():
     	"pvipmetric": "pageviews",
     	"pvipdays": "1"
     }
-    R = S.get(url=URL, params=PARAMS)
+    R = S.get(url=URL, params=PARAMS, headers=HEADERS)
     DATA = R.json()
     PAGES = DATA["query"]["pages"]
     pagesList = list(filter(lambda p: ":" not in p["title"], list(PAGES.values())))
@@ -31,7 +34,7 @@ def getRandomMostViewedPages():
     	"ascii": 1,
     	"pvimlimit": "100"
     }
-    R = S.get(url=URL, params=PARAMS)
+    R = S.get(url=URL, params=PARAMS, headers=HEADERS)
     DATA = R.json()
     PAGES = DATA["query"]["mostviewed"]
     pagesList = list(filter(lambda p: ":" not in p["title"], PAGES))
@@ -52,7 +55,7 @@ def getBacklinks(pageTitle):
     	"gblnamespace": "0",
     	"gbllimit": "100"
     }
-    R = S.get(url=URL, params=PARAMS)
+    R = S.get(url=URL, params=PARAMS, headers=HEADERS)
     DATA = R.json()
     PAGES = DATA["query"]["pages"]
     return PAGES.values()
